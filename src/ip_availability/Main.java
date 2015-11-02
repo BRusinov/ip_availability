@@ -10,13 +10,13 @@ import java.util.List;
 public class Main {
 
 	public static void main(String[] args) {
-		System.out.print("Въведете команда: ");
+		System.out.print("Р’СЉРІРµРґРµС‚Рµ РєРѕРјР°РЅРґР°: ");
 		Scanner in = new Scanner(System.in);
 		String name = in.next();
-		while(!name.equals("shutdown")){	
+		while(true){	
 			if(!execute(name))
 				break;
-			System.out.print("Въведете команда: ");
+			System.out.print("Р’СЉРІРµРґРµС‚Рµ РєРѕРјР°РЅРґР°: ");
 			name = in.next();
 		}
 		in.close();
@@ -24,7 +24,6 @@ public class Main {
 	
 	final static Map<String, Integer> usersToLoginCount = new HashMap<String, Integer>();
 	final static List<String> currentlyLoggedUsers = new LinkedList<String>();
-	static int loginCounter=0;
 	
 	private static Boolean execute(String command){
 		
