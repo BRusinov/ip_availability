@@ -1,28 +1,32 @@
 package ip_availability;
 
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+
 public class ListAvailableCommandHandler implements currentlyLoggedUsers {
 	private final String command;
-	public ListAvailableCommandHandler(String command){
+	private final Socket socket;
+	public ListAvailableCommandHandler(String command, Socket socket){
 		this.command=command;
+		this.socket=socket;
 	}
 	
-	public Boolean ListAvailable(){
-		final String[] split = command.split(":");
-		if("listavailable".equals(split[1])){
-			String users = "ok";
-			if(currentlyLoggedUsers.contains(split[0])){
-				for (String name : currentlyLoggedUsers) {
-					users += ":" + name;
-				}
-				System.out.println(users);
-				return true;
+	public Boolean ListAvailable(String string) throws IOException{
+		final String[] split = string.split(":");
+		final PrintStream out = new PrintStream(socket.getOutputStream());
+
+		String users = "ok";
+		if(currentlyLoggedUsers.contains(split[0])){
+			for (String name : currentlyLoggedUsers) {
+				users += ":" + name;
 			}
-			else{
-				System.out.println("error:notlogged");
-				return true;
-			}
+			out.println(users);
+			return true;
 		}
-		System.out.println("error:unknowncommand");
-		return true;
+		else{
+			out.println("error:notlogged");
+			return true;
+		}
 	}
 }
