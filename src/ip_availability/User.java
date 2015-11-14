@@ -25,7 +25,7 @@ public class User implements currentlyLoggedUsers, Runnable{
 	
 	public void run(){
 		Scanner scanner;
-		LogoutCommandHandler logout;
+		
 		InfoCommandHandler info;
 		ShutdownCommandHandler shutdown;
 		try {
@@ -35,7 +35,8 @@ public class User implements currentlyLoggedUsers, Runnable{
 			while(scanner.hasNextLine()){
 				final String line= scanner.nextLine();
 				final String[] string= line.split(":");
-				LoginCommandHandler login= new LoginCommandHandler(line, scanner, socket);
+				LoginCommandHandler login= new LoginCommandHandler(line, socket);
+				LogoutCommandHandler logout= new LogoutCommandHandler(line, socket);
 				if(SHUTDOWN.equals(line)){
 					echoServer.stopServer();
 					break;
@@ -45,7 +46,11 @@ public class User implements currentlyLoggedUsers, Runnable{
 					out.println("vutre");
 					login.Login(line);
 //					break;
-				}else 
+				} 
+				if("logout".equals(string[1])){
+					out.println("vunka");
+					logout.Logout(line);
+				}
 				out.println("error:unknowncommand");
 			}
 			scanner.close();
