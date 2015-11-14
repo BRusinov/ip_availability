@@ -1,0 +1,80 @@
+package ip_availability;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+//import com.sun.security.ntlm.Client;
+
+public class EchoServer {
+	private final int port;
+	private boolean running;
+	private final List<User> clients =Collections.synchronizedList(new LinkedList<User>());
+	private ServerSocket serverSocket;
+	
+	public EchoServer(int port){
+		this.port=port;
+	}
+	
+	public void startServer() throws IOException {
+//		running=true;
+//		setRunning();
+//		final ServerSocket serverSocket=new ServerSocket(port);
+		final ServerSocket localServerSocket= createServerSocket();
+		while(isRunning()){
+//			final Socket socket= serverSocket.accept();
+			final Socket socket;
+//			final User client=new User(this, socket);
+			try{
+				socket=localServerSocket.accept();
+			} catch (SocketException e) {
+				if(!localServerSocket.isClosed()){
+					throw e;
+				}
+				break;
+			}
+			
+			final User client=new User(this, socket);
+			clients.add(client);
+			new Thread(client).start();
+		}
+//		serverSocket.close();
+	}
+	
+	private synchronized ServerSocket createServerSocket() throws IOException {
+		// TODO Auto-generated method stub
+		if(running){
+			throw new IllegalStateException("Already running");
+		}
+		running=true;
+		serverSocket= new ServerSocket(port);
+		return serverSocket;
+	}
+	
+	public synchronized boolean isRunning() {
+		return running;
+	}
+	
+	public synchronized void stopServer() throws IOException{
+		if(!running){
+			throw new IllegalStateException("Not running");
+		}
+		
+		running=false;
+		
+		serverSocket.close();
+		serverSocket=null;
+		
+		for (User next:clients) {
+			next.stopClient();
+		}
+	}
+	
+	public void onClientStopped(User User){
+		clients.remove(User);
+	}
+}
