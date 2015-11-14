@@ -8,12 +8,11 @@ import java.util.Scanner;
 public class LoginCommandHandler implements currentlyLoggedUsers{
 	private final String command;
 //	private final PrintStream out;
-	private final Scanner scanner;
+//	private final Scanner scanner;
 	private final Socket socket;
 	
-	public LoginCommandHandler(String command, Scanner scanner, Socket socket) {
+	public LoginCommandHandler(String command, Socket socket) {
 		this.command=command;
-		this.scanner=scanner;
 		this.socket=socket;
 	}
 	
@@ -21,25 +20,24 @@ public class LoginCommandHandler implements currentlyLoggedUsers{
 	public Boolean Login(String string) throws IOException{
 		final String[] split = string.split(":");
 		final PrintStream out = new PrintStream(socket.getOutputStream());
-			if(currentlyLoggedUsers.contains(split[1])) {				
-				if (usersToLoginCount.containsKey(split[1]))
-					usersToLoginCount.put(split[1], usersToLoginCount.get(split[1]) + 1);
-				else
-					usersToLoginCount.put(split[1], 1);
-				out.println("ok");
-				out.println("tuka sum we ");
-				return true;
-			} 
-			else {
-				currentlyLoggedUsers.add(split[1]);
-				if (usersToLoginCount.containsKey(split[1]))
-					usersToLoginCount.put(split[1], usersToLoginCount.get(split[1]) + 1);
-				else
-					usersToLoginCount.put(split[1], 1);
-				out.println("ok");
-				return true;
-			}
-//		out.println("error:unknowncommand");
+		if(currentlyLoggedUsers.contains(split[1])) {				
+			if (usersToLoginCount.containsKey(split[1]))
+				usersToLoginCount.put(split[1], usersToLoginCount.get(split[1]) + 1);
+			else
+				usersToLoginCount.put(split[1], 1);
+			out.println("ok");
+			out.println("tuka sum we ");
+			return true;
+		} 
+		else {
+			currentlyLoggedUsers.add(split[1]);
+			if (usersToLoginCount.containsKey(split[1]))
+				usersToLoginCount.put(split[1], usersToLoginCount.get(split[1]) + 1);
+			else
+				usersToLoginCount.put(split[1], 1);
+			out.println("ok");
+			return true;
+		}
 	}
 }
 
