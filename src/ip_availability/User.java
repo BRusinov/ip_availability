@@ -6,8 +6,14 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class User implements currentlyLoggedUsers{
-	private static final Object STOP_SERVER = "shutdown";
+public class User implements currentlyLoggedUsers, Runnable{
+	private static final Object SHUTDOWN = "shutdown";
+//	private static final Object LOGIN = "login";
+	private static final Object LOGOUT = "logout";
+	private static final Object INFO = "info";
+	private static final Object LISTAVAILABLE = "listavailable";
+	private static final Object LISTABSENT = "listabsent";
+	
 //	private static String command;
 	private final Socket socket;
 	private EchoServer echoServer;
@@ -19,15 +25,28 @@ public class User implements currentlyLoggedUsers{
 	
 	public void run(){
 		Scanner scanner;
+		LogoutCommandHandler logout;
+		InfoCommandHandler info;
+		ShutdownCommandHandler shutdown;
 		try {
 			final PrintStream out = new PrintStream(socket.getOutputStream());
 			scanner = new Scanner(socket.getInputStream());
+			out.println("EXO");
 			while(scanner.hasNextLine()){
 				final String line= scanner.nextLine();
-				if(STOP_SERVER.equals(line)){
+				final String[] string= line.split(":");
+				LoginCommandHandler login= new LoginCommandHandler(line, scanner, socket);
+				if(SHUTDOWN.equals(line)){
 					echoServer.stopServer();
 					break;
-				} 
+				}
+				if("login".equals(string[0])){
+					System.out.println("tyka");
+					out.println("vutre");
+					login.Login(line);
+//					break;
+				}else 
+				out.println("error:unknowncommand");
 			}
 			scanner.close();
 			out.close();

@@ -1,21 +1,33 @@
 package ip_availability;
 
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.util.Scanner;
+
 public class LoginCommandHandler implements currentlyLoggedUsers{
 	private final String command;
-	public LoginCommandHandler(String command) {
+//	private final PrintStream out;
+	private final Scanner scanner;
+	private final Socket socket;
+	
+	public LoginCommandHandler(String command, Scanner scanner, Socket socket) {
 		this.command=command;
+		this.scanner=scanner;
+		this.socket=socket;
 	}
 	
 	
-	public Boolean Login(){
-		final String[] split = command.split(":");
-		if ("login".equals(split[0])) {
+	public Boolean Login(String string) throws IOException{
+		final String[] split = string.split(":");
+		final PrintStream out = new PrintStream(socket.getOutputStream());
 			if(currentlyLoggedUsers.contains(split[1])) {				
 				if (usersToLoginCount.containsKey(split[1]))
 					usersToLoginCount.put(split[1], usersToLoginCount.get(split[1]) + 1);
 				else
 					usersToLoginCount.put(split[1], 1);
-				System.out.println("ok");
+				out.println("ok");
+				out.println("tuka sum we ");
 				return true;
 			} 
 			else {
@@ -24,12 +36,10 @@ public class LoginCommandHandler implements currentlyLoggedUsers{
 					usersToLoginCount.put(split[1], usersToLoginCount.get(split[1]) + 1);
 				else
 					usersToLoginCount.put(split[1], 1);
-				System.out.println("ok");
+				out.println("ok");
 				return true;
 			}
-		}
-		System.out.println("error:unknowncommand");
-		return true;
+//		out.println("error:unknowncommand");
 	}
 }
 
