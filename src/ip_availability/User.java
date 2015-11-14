@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 //import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.Scanner;
 
 public class User implements currentlyLoggedUsers, Runnable{
@@ -29,6 +30,7 @@ public class User implements currentlyLoggedUsers, Runnable{
 				LogoutCommandHandler logout= new LogoutCommandHandler(line, socket);
 				ShutdownCommandHandler shutdown= new ShutdownCommandHandler(line, socket);
 				InfoCommandHandler info= new InfoCommandHandler(line, socket);
+				ListAvailableCommandHandler list= new ListAvailableCommandHandler(line, socket);
 				if(SHUTDOWN.equals(line)){
 					echoServer.stopServer();
 					break;
@@ -51,6 +53,9 @@ public class User implements currentlyLoggedUsers, Runnable{
 				}
 				if("info".equals(string[1])){
 					info.Info(line);
+				}
+				if("listavailable".equals(string[1])){
+					list.ListAvailable(line);
 				}
 				out.println("error:unknowncommand");
 			}
