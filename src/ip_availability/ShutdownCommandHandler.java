@@ -1,25 +1,28 @@
 package ip_availability;
 
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+
 public class ShutdownCommandHandler implements currentlyLoggedUsers {
 	private final String command;
-	public ShutdownCommandHandler(String command){
+	private final Socket socket;
+	public ShutdownCommandHandler(String command, Socket socket){
 		this.command=command;
+		this.socket=socket;
 	}
 	
-	public Boolean Shutdown(){
-		final String[] split = command.split(":");
-		if("shutdown".equals(split[1])){
-			if(currentlyLoggedUsers.contains(split[0])){
-				System.out.println("ok");
-//				System.out.println("tyka");
-				return false;
-			}
-			else{
-				System.out.println("error:notlogged");
-				return true;
-			}
+	public Boolean Shutdown(String string) throws IOException{
+		final String[] split = string.split(":");
+		final PrintStream out = new PrintStream(socket.getOutputStream());
+		
+		if(currentlyLoggedUsers.contains(split[0])){
+			out.println("ok");
+			return true;
 		}
-		System.out.println("error:unknowncommand");
-		return true;
+		else{
+			out.println("error:notlogged");
+			return false;
+		}
 	}
 }

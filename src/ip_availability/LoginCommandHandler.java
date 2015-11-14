@@ -3,12 +3,9 @@ package ip_availability;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class LoginCommandHandler implements currentlyLoggedUsers{
 	private final String command;
-//	private final PrintStream out;
-//	private final Scanner scanner;
 	private final Socket socket;
 	
 	public LoginCommandHandler(String command, Socket socket) {
