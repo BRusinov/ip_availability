@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 
-public class ListAvailableCommandHandler implements currentlyLoggedUsers {
+public class ListAvailableCommandHandler implements General {
 	private final String command;
 	private final Socket socket;
 	public ListAvailableCommandHandler(String command, Socket socket){
