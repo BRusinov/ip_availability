@@ -1,11 +1,10 @@
 package ip_availability;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.LinkedList;
 
+@SuppressWarnings("unused")
 public class LoginCommandHandler implements General{
 	private final String command;
 	private final Socket socket;

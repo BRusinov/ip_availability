@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 
+@SuppressWarnings("unused")
+
 public class LogoutCommandHandler implements General {
 	private final String command;
 	private final Socket socket;
