@@ -14,26 +14,30 @@ public class LoginCommandHandler implements currentlyLoggedUsers{
 	}
 	
 	
-	public Boolean Login(String string) throws IOException{
+	public void Login(String string) throws IOException{
 		final String[] split = string.split(":");
 		final PrintStream out = new PrintStream(socket.getOutputStream());
 		if(currentlyLoggedUsers.contains(split[1])) {				
-			if (usersToLoginCount.containsKey(split[1]))
+			if (usersToLoginCount.containsKey(split[1])){
 				usersToLoginCount.put(split[1], usersToLoginCount.get(split[1]) + 1);
-			else
+				notLoggedUsers.remove(split[1]);
+			}
+			else{
 				usersToLoginCount.put(split[1], 1);
+				notLoggedUsers.remove(split[1]);
+			}
 			out.println("ok");
-			out.println("tuka sum we ");
-			return true;
 		} 
 		else {
 			currentlyLoggedUsers.add(split[1]);
-			if (usersToLoginCount.containsKey(split[1]))
+			if (usersToLoginCount.containsKey(split[1])){
 				usersToLoginCount.put(split[1], usersToLoginCount.get(split[1]) + 1);
-			else
+				notLoggedUsers.remove(split[1]);
+			}else{
 				usersToLoginCount.put(split[1], 1);
+				notLoggedUsers.remove(split[1]);
+			}
 			out.println("ok");
-			return true;
 		}
 	}
 }
