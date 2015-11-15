@@ -3,7 +3,7 @@ package ip_availability;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
-public class ListAbsentCommandHandler implements currentlyLoggedUsers{
+public class ListAbsentCommandHandler implements General{
 	private final String command;
 	private final Socket socket;
  
