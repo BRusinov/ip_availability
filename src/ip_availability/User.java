@@ -13,6 +13,7 @@ public class User implements General, Runnable{
 		this.echoServer=echoServer;
 		this.socket=socket;
 	}
+	
 	Scanner scanner;
 	public void run(){
 		try {
@@ -21,6 +22,10 @@ public class User implements General, Runnable{
 			out.println("EXO");
 			while(scanner.hasNextLine()){
 				final String line= scanner.nextLine();
+				if (!line.contains(":")){
+					out.println("error:unknowncommand");
+					continue;
+				}
 				final String[] string= line.split(":");
 				if("login".equals(string[0])){
 					LoggedIn(line);
@@ -50,7 +55,7 @@ public class User implements General, Runnable{
 			e.printStackTrace();
 		} finally {
 			echoServer.onClientStopped(this);
-		}	
+		}
 	}
 	
 	public void LoggedIn(String string) throws IOException{
