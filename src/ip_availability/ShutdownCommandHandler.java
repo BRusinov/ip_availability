@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 
-public class ShutdownCommandHandler implements currentlyLoggedUsers {
+public class ShutdownCommandHandler implements General {
 	private final String command;
 	private final Socket socket;
 	public ShutdownCommandHandler(String command, Socket socket){
