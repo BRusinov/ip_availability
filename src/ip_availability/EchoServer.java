@@ -21,14 +21,9 @@ public class EchoServer {
 	}
 	
 	public void startServer() throws IOException {
-//		running=true;
-//		setRunning();
-//		final ServerSocket serverSocket=new ServerSocket(port);
 		final ServerSocket localServerSocket= createServerSocket();
 		while(isRunning()){
-//			final Socket socket= serverSocket.accept();
 			final Socket socket;
-//			final User client=new User(this, socket);
 			try{
 				socket=localServerSocket.accept();
 			} catch (SocketException e) {
@@ -37,16 +32,13 @@ public class EchoServer {
 				}
 				break;
 			}
-			
 			final User client=new User(this, socket);
 			clients.add(client);
 			new Thread(client).start();
 		}
-//		serverSocket.close();
 	}
 	
 	private synchronized ServerSocket createServerSocket() throws IOException {
-		// TODO Auto-generated method stub
 		if(running){
 			throw new IllegalStateException("Already running");
 		}
@@ -63,16 +55,14 @@ public class EchoServer {
 		if(!running){
 			throw new IllegalStateException("Not running");
 		}
-		
 		running=false;
-		
 		serverSocket.close();
 		serverSocket=null;
-		
 		for (User next:clients) {
 			next.stopClient();
 		}
 	}
+
 	
 	public void onClientStopped(User User){
 		clients.remove(User);
