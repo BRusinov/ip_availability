@@ -14,16 +14,15 @@ public class LogoutCommandHandler implements currentlyLoggedUsers {
 		this.socket=socket;
 	}
 	
-	public Boolean Logout(String string) throws IOException{
+	public void Logout(String string) throws IOException{
 		final String[] split = string.split(":");
 		final PrintStream out = new PrintStream(socket.getOutputStream());
 		if(currentlyLoggedUsers.contains(split[0]) && usersToLoginCount.containsKey(split[0])){
 			currentlyLoggedUsers.remove(split[0]);
-			return true;
+			notLoggedUsers.add(split[0]);
 		}
 		else {
 			out.println("error:notlogged");
-			return true;
 		}
 	}
 }
