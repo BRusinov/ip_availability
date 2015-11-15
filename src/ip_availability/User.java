@@ -5,7 +5,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class User implements currentlyLoggedUsers, Runnable{
+public class User implements General, Runnable{
 	private final Socket socket;
 	private EchoServer echoServer;
 	
@@ -13,9 +13,8 @@ public class User implements currentlyLoggedUsers, Runnable{
 		this.echoServer=echoServer;
 		this.socket=socket;
 	}
-	
+	Scanner scanner;
 	public void run(){
-		Scanner scanner;
 		try {
 			final PrintStream out = new PrintStream(socket.getOutputStream());
 			scanner = new Scanner(socket.getInputStream());
@@ -23,43 +22,69 @@ public class User implements currentlyLoggedUsers, Runnable{
 			while(scanner.hasNextLine()){
 				final String line= scanner.nextLine();
 				final String[] string= line.split(":");
-				LoginCommandHandler login= new LoginCommandHandler(line, socket);
-				LogoutCommandHandler logout= new LogoutCommandHandler(line, socket);
-				ShutdownCommandHandler shutdown= new ShutdownCommandHandler(line, socket);
-				InfoCommandHandler info= new InfoCommandHandler(line, socket);
-				ListAvailableCommandHandler list= new ListAvailableCommandHandler(line, socket);
-				ListAbsentCommandHandler absent= new ListAbsentCommandHandler(line, socket);
 				if("login".equals(string[0])){
-					login.Login(line);
+					LoggedIn(line);
 				} 
 				else if("logout".equals(string[1])){
-					logout.Logout(line);
+					LoggedOut(line);
 				}
 				else if("shutdown".equals(string[1])){
-					if(shutdown.Shutdown(line)){
-						echoServer.stopServer();
-						break;
-					}
+					Shutdown(line);
 				}
 				else if("info".equals(string[1])){
-					info.Info(line);
+					Info(line);
 				}
 				else if("listavailable".equals(string[1])){
-					list.ListAvailable(line);
+					ListAvailable(line);
 				}
 				else if("listabsent".equals(string[1])){
-					absent.ListAbsent(line);
+					ListAbsent(line);
 				}else
 				out.println("error:unknowncommand");
 			}
 			scanner.close();
 			out.close();
+			socket.close();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			echoServer.onClientStopped(this);
 		}	
+	}
+	
+	public void LoggedIn(String string) throws IOException{
+		LoginCommandHandler login= new LoginCommandHandler(string, socket);
+		login.Login(string);
+	}
+	
+	public void LoggedOut(String string) throws IOException{
+		LogoutCommandHandler logout= new LogoutCommandHandler(string, socket);
+		logout.Logout(string);
+	}
+	
+	public void Info(String string) throws IOException{
+		InfoCommandHandler info= new InfoCommandHandler(string, socket);
+		info.Info(string);
+	}
+	
+	public Boolean Shutdown(String string) throws IOException{
+		ShutdownCommandHandler shutdown= new ShutdownCommandHandler(string, socket);
+		if(shutdown.Shutdown(string)){
+			echoServer.stopServer();
+			return false;
+		}
+		return true;
+	}
+	
+	public void ListAvailable(String string) throws IOException{
+		ListAvailableCommandHandler list= new ListAvailableCommandHandler(string, socket);
+		list.ListAvailable(string);
+	}
+	
+	public void ListAbsent(String string) throws IOException{
+		ListAbsentCommandHandler absent= new ListAbsentCommandHandler(string, socket);
+		absent.ListAbsent(string);
 	}
 	
 	public void stopClient() throws IOException{
