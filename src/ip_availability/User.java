@@ -2,13 +2,10 @@ package ip_availability;
 
 import java.io.IOException;
 import java.io.PrintStream;
-//import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
 import java.util.Scanner;
 
 public class User implements currentlyLoggedUsers, Runnable{
-	private static final Object SHUTDOWN = "shutdown";
 	private final Socket socket;
 	private EchoServer echoServer;
 	
@@ -31,32 +28,28 @@ public class User implements currentlyLoggedUsers, Runnable{
 				ShutdownCommandHandler shutdown= new ShutdownCommandHandler(line, socket);
 				InfoCommandHandler info= new InfoCommandHandler(line, socket);
 				ListAvailableCommandHandler list= new ListAvailableCommandHandler(line, socket);
-				if(SHUTDOWN.equals(line)){
-					echoServer.stopServer();
-					break;
-				}
+				ListAbsentCommandHandler absent= new ListAbsentCommandHandler(line, socket);
 				if("login".equals(string[0])){
-					System.out.println("tyka");
-					out.println("vutre");
 					login.Login(line);
-//					break;
 				} 
-				if("logout".equals(string[1])){
-					out.println("vunka");
+				else if("logout".equals(string[1])){
 					logout.Logout(line);
 				}
-				if("shutdown".equals(string[1])){
+				else if("shutdown".equals(string[1])){
 					if(shutdown.Shutdown(line)){
 						echoServer.stopServer();
 						break;
 					}
 				}
-				if("info".equals(string[1])){
+				else if("info".equals(string[1])){
 					info.Info(line);
 				}
-				if("listavailable".equals(string[1])){
+				else if("listavailable".equals(string[1])){
 					list.ListAvailable(line);
 				}
+				else if("listabsent".equals(string[1])){
+					absent.ListAbsent(line);
+				}else
 				out.println("error:unknowncommand");
 			}
 			scanner.close();
