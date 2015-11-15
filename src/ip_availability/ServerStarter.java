@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class ServerStarter {
 
-		private static final int SERVER_PORT = 40005;
+		private static final int SERVER_PORT = 40008;
 
 		public static void main(String[] args) throws IOException {
 			final EchoServer server=new EchoServer(SERVER_PORT);

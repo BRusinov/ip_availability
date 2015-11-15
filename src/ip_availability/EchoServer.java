@@ -5,12 +5,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 //import com.sun.security.ntlm.Client;
 
-public class EchoServer {
+public class EchoServer implements General {
 	private final int port;
 	private boolean running;
 	private final List<User> clients =Collections.synchronizedList(new LinkedList<User>());
@@ -63,8 +64,17 @@ public class EchoServer {
 		}
 	}
 
-	
-	public void onClientStopped(User User){
-		clients.remove(User);
+	public void onClientStopped(User user){
+		LinkedList<String> usernames= new LinkedList<String>();
+		currentlyLoggedUsers.remove(user);
+		for (String name : currentlyLoggedUsers.keySet()) {
+			if(currentlyLoggedUsers.get(name)==user.getSocket()){
+				usernames.add(name);
+			}
+		}
+		for (String name : usernames) {
+			currentlyLoggedUsers.remove(name);
+		}
+		clients.remove(user);
 	}
 }

@@ -17,8 +17,8 @@ public class ListAvailableCommandHandler implements General {
 		final PrintStream out = new PrintStream(socket.getOutputStream());
 
 		String users = "ok";
-		if(currentlyLoggedUsers.contains(split[0])){
-			for (String name : currentlyLoggedUsers) {
+		if(currentlyLoggedUsers.containsKey(split[0])){
+			for (String name : currentlyLoggedUsers.keySet()) {
 				users += ":" + name;
 			}
 			out.println(users);

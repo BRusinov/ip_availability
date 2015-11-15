@@ -16,7 +16,7 @@ public class ListAbsentCommandHandler implements General{
 		final String[] split = string.split(":");
 		final PrintStream out = new PrintStream(socket.getOutputStream());
 		String users = "ok";
-		if(currentlyLoggedUsers.contains(split[0])){
+		if(currentlyLoggedUsers.containsKey(split[0])){
 			for (String name : notLoggedUsers) {
 				if(usersToLoginCount.containsKey(name)){
 					users += ":" + name;

@@ -14,13 +14,17 @@ public class User implements General, Runnable{
 		this.socket=socket;
 	}
 	
+	public Socket getSocket(){
+		return this.socket;
+	}
+	
 	Scanner scanner;
 	public void run(){
 		try {
 			final PrintStream out = new PrintStream(socket.getOutputStream());
 			scanner = new Scanner(socket.getInputStream());
-			out.println("EXO");
-			while(scanner.hasNextLine()){
+			out.println("Enter command:");
+			while(scanner.hasNextLine() && this.socket.isConnected()){
 				final String line= scanner.nextLine();
 				if (!line.contains(":")){
 					out.println("error:unknowncommand");
@@ -29,6 +33,7 @@ public class User implements General, Runnable{
 				final String[] string= line.split(":");
 				if("login".equals(string[0])){
 					LoggedIn(line);
+					out.println("ok");
 				} 
 				else if("logout".equals(string[1])){
 					LoggedOut(line);
@@ -46,6 +51,8 @@ public class User implements General, Runnable{
 					ListAbsent(line);
 				}else
 				out.println("error:unknowncommand");
+				out.println("Enter command:");
+
 			}
 			scanner.close();
 			out.close();
@@ -58,9 +65,13 @@ public class User implements General, Runnable{
 		}
 	}
 	
+	public void StopUser(){
+		echoServer.onClientStopped(this);
+	}
+	
 	public void LoggedIn(String string) throws IOException{
-		LoginCommandHandler login= new LoginCommandHandler(string, socket);
-		login.Login(string);
+		LoginCommandHandler login = new LoginCommandHandler(string, socket);
+		login.Login(string,this);
 	}
 	
 	public void LoggedOut(String string) throws IOException{

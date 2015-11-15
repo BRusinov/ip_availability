@@ -15,8 +15,8 @@ public class InfoCommandHandler implements General {
 	public void Info(String string) throws IOException{
 		final String[] split = string.split(":");
 		final PrintStream out = new PrintStream(socket.getOutputStream());
-		if(currentlyLoggedUsers.contains(split[0])){
-			out.println("ok:" + split[2] + ":" + (currentlyLoggedUsers.contains(split[2]) ? "true" : "false") + ":" + usersToLoginCount.get(split[2]));
+		if(currentlyLoggedUsers.containsKey(split[0])){
+			out.println("ok:" + split[2] + ":" + (currentlyLoggedUsers.containsKey(split[2]) ? "true" : "false") + ":" + usersToLoginCount.get(split[2]));
 		}
 		else {
 			out.println("error:notlogged");
