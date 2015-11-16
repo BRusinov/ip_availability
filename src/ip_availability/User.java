@@ -48,9 +48,8 @@ public class User implements General, Runnable {
 	public String CommandHandler(String line) throws IOException {
 		final String[] split = line.split(":");
 		String result;
-		if ("login".equals(split[0])) {
-			result = LoggedIn(line);
-		} else if ("logout".equals(split[0])) result = LoggedOut(line);
+		if ("login".equals(split[0])) result = LoggedIn(line);
+		else if ("logout".equals(split[0])) result = LoggedOut(line);
 		else if ("shutdown".equals(split[0])) result = Shutdown(line);
 		else if ("info".equals(split[0])) result = Info(line);
 		else if ("listavailable".equals(split[0])) result = ListAvailable(line);
@@ -58,6 +57,7 @@ public class User implements General, Runnable {
 		else result = "error:unknowncommand";
 		return result;
 	}
+	
 	public String LoggedIn(String string) throws IOException {
 		LoginCommandHandler login = new LoginCommandHandler(string, socket, this);
 		return login.Login(string, this);

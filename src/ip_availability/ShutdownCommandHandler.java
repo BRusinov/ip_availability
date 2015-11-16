@@ -18,9 +18,7 @@ public class ShutdownCommandHandler implements General {
 	
 	public String Shutdown(String string) throws IOException{
 		final String[] split = string.split(":");
-		if(currentlyLoggedUsers.containsKey(user.name)){
-			return "ok";
-		}
+		if(currentlyLoggedUsers.containsKey(user.name)) return "ok";
 			return "error:notlogged";
 	}
 }

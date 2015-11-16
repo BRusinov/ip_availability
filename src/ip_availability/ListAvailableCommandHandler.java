@@ -19,7 +19,6 @@ public class ListAvailableCommandHandler implements General {
 	public String ListAvailable(String string) throws IOException{
 		final String[] split = string.split(":");
 		final PrintStream out = new PrintStream(socket.getOutputStream());
-
 		String users = "ok";
 		if(currentlyLoggedUsers.containsKey(user.name)){
 			for (String name : currentlyLoggedUsers.keySet()) {
@@ -27,8 +26,6 @@ public class ListAvailableCommandHandler implements General {
 			}
 			return users;
 		}
-		else{
-			return "error:notlogged";
-		}
+		else return "error:notlogged";
 	}
 }

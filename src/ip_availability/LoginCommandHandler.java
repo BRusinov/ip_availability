@@ -52,7 +52,7 @@ public class LoginCommandHandler implements General{
 			Interval interval= new Interval(start);
 			usersToLoginCount.put(name, 1);
 			notLoggedUsers.remove(name);
-			allUsers.add(user);
+			allUsers.put(name,user);
 		}
 	}
 }

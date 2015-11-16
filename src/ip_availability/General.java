@@ -10,5 +10,5 @@ public interface General {
 	final static Map<String, Socket> currentlyLoggedUsers = new HashMap<String, Socket>();
 	final Map<String, Integer> usersToLoginCount = new HashMap<String, Integer>();
 	final static List<String> notLoggedUsers=new LinkedList<String>();
-	final List<User> allUsers= new LinkedList<User>();
+	final Map<String,User> allUsers= new HashMap<String,User>();
 }
