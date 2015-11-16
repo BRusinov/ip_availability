@@ -9,9 +9,11 @@ import java.net.Socket;
 public class ListAvailableCommandHandler implements General {
 	private final String command;
 	private final Socket socket;
-	public ListAvailableCommandHandler(String command, Socket socket){
+	private final User user;
+	public ListAvailableCommandHandler(String command, Socket socket, User user){
 		this.command=command;
 		this.socket=socket;
+		this.user = user;
 	}
 	
 	public String ListAvailable(String string) throws IOException{
@@ -19,7 +21,7 @@ public class ListAvailableCommandHandler implements General {
 		final PrintStream out = new PrintStream(socket.getOutputStream());
 
 		String users = "ok";
-		if(currentlyLoggedUsers.containsKey(split[0])){
+		if(currentlyLoggedUsers.containsKey(user.name)){
 			for (String name : currentlyLoggedUsers.keySet()) {
 				users += ":" + name;
 			}

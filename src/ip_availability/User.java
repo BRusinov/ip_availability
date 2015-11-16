@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class User implements General, Runnable {
 	private final Socket socket;
 	private EchoServer echoServer;
+	public String name;
 
 	public User(EchoServer echoServer, Socket socket) {
 		this.echoServer = echoServer;
@@ -31,15 +32,7 @@ public class User implements General, Runnable {
 			out.println("Enter command:");
 			while (scanner.hasNextLine() && this.socket.isConnected()) {
 				final String line = scanner.nextLine();
-				if (!line.contains(":")) {
-					out.println("error:unknowncommand");
-					continue;
-				}
-				final String[] string = line.split(":");
-				/*CommandHandler(string, line);
-				if (!CommandHandler(string, line))
-					out.println("error:unknowncommand");*/
-				out.println(CommandHandler(string, line));
+				out.println(CommandHandler(line));
 				out.println("Enter command:");
 			}
 			scanner.close();
@@ -52,31 +45,19 @@ public class User implements General, Runnable {
 		}
 	}
 
-	public String CommandHandler(String[] string, String line) throws IOException {
+	public String CommandHandler(String line) throws IOException {
+		final String[] split = line.split(":");
 		String result;
-		if ("login".equals(string[0])) {
+		if ("login".equals(split[0])) {
 			result = LoggedIn(line);
-			// out.println("ok");
-		} else if ("logout".equals(string[1]))
-			result = LoggedOut(line);
-		else if ("shutdown".equals(string[1]))
-			result = Shutdown(line);
-		else if ("info".equals(string[1]))
-			result = Info(line);
-		else if ("listavailable".equals(string[1]))
-			result = ListAvailable(line);
-		else if ("listabsent".equals(string[1]))
-			result = ListAbsent(line);
-		else
-			result = "error:unknowncommand";
-		
+		} else if ("logout".equals(split[0])) result = LoggedOut(line);
+		else if ("shutdown".equals(split[0])) result = Shutdown(line);
+		else if ("info".equals(split[0])) result = Info(line);
+		else if ("listavailable".equals(split[0])) result = ListAvailable(line);
+		else if ("listabsent".equals(split[0])) result = ListAbsent(line);
+		else result = "error:unknowncommand";
 		return result;
 	}
-
-	public void StopUser() {
-		echoServer.onClientStopped(this);
-	}
-
 	public String LoggedIn(String string) throws IOException {
 		LoginCommandHandler login = new LoginCommandHandler(string, socket, this);
 		return login.Login(string, this);
@@ -93,7 +74,7 @@ public class User implements General, Runnable {
 	}
 
 	public String Shutdown(String string) throws IOException {
-		ShutdownCommandHandler shutdown = new ShutdownCommandHandler(string, socket);
+		ShutdownCommandHandler shutdown = new ShutdownCommandHandler(string, socket, this);
 		if (shutdown.Shutdown(string).equals("ok")) {
 			echoServer.stopServer();
 			return "not ok";
@@ -102,7 +83,7 @@ public class User implements General, Runnable {
 	}
 
 	public String ListAvailable(String string) throws IOException {
-		ListAvailableCommandHandler list = new ListAvailableCommandHandler(string, socket);
+		ListAvailableCommandHandler list = new ListAvailableCommandHandler(string, socket, this);
 		return list.ListAvailable(string);
 	}
 

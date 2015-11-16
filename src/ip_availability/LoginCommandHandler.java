@@ -36,6 +36,7 @@ public class LoginCommandHandler implements General{
 		} 
 		else this.AddNameToLists(split[1]);
 		user.date.add(new Interval(new Date()));
+		user.name = split[1];
 		return "ok";
 	}
 	
