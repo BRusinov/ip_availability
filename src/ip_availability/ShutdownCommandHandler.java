@@ -14,16 +14,11 @@ public class ShutdownCommandHandler implements General {
 		this.socket=socket;
 	}
 	
-	public Boolean Shutdown(String string) throws IOException{
+	public String Shutdown(String string) throws IOException{
 		final String[] split = string.split(":");
-		final PrintStream out = new PrintStream(socket.getOutputStream());
 		if(currentlyLoggedUsers.containsKey(split[0])){
-			out.println("ok");
-			return true;
+			return "ok";
 		}
-		else{
-			out.println("error:notlogged");
-			return false;
-		}
+			return "error:notlogged";
 	}
 }

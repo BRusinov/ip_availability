@@ -2,17 +2,22 @@ package ip_availability;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Date;
 import java.util.LinkedList;
+
 
 @SuppressWarnings("unused")
 public class LoginCommandHandler implements General{
 	private final String command;
 	private final Socket socket;
-	public LoginCommandHandler(String command, Socket socket) {
+	private final User user;
+	public LoginCommandHandler(String command, Socket socket, User user) {
 		this.command=command;
 		this.socket=socket;
+		this.user=user;
 	}
-	public void Login(String string, User user) throws IOException{
+	 
+	public String Login(String string, User user) throws IOException{
 		final String[] split = string.split(":");
 		if(currentlyLoggedUsers.containsKey(split[1])) {				
 			if (notLoggedUsers.contains(split[1])) notLoggedUsers.remove(split[1]);
@@ -30,17 +35,22 @@ public class LoginCommandHandler implements General{
 			}
 		} 
 		else this.AddNameToLists(split[1]);
+		return "ok";
 	}
 	
 	private void AddNameToLists(String name)
 	{
+		Date start= new Date();
 		currentlyLoggedUsers.put(name,this.socket);
 		if (usersToLoginCount.containsKey(name)){
+			Interval interval= new Interval(start);
 			usersToLoginCount.put(name, usersToLoginCount.get(name) + 1);
 			notLoggedUsers.remove(name);
 		}else{
+			Interval interval= new Interval(start);
 			usersToLoginCount.put(name, 1);
 			notLoggedUsers.remove(name);
+			allUsers.add(user);
 		}
 	}
 }

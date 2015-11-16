@@ -15,7 +15,7 @@ public class ListAbsentCommandHandler implements General{
 		this.socket=socket;
 	}
 	
-	public void ListAbsent(String string) throws IOException {
+	public String ListAbsent(String string) throws IOException {
 		final String[] split = string.split(":");
 		final PrintStream out = new PrintStream(socket.getOutputStream());
 		String users = "ok";
@@ -25,8 +25,8 @@ public class ListAbsentCommandHandler implements General{
 					users += ":" + name;
 				}
 			}
-			out.println(users);
+			return users;
 		}
-		else out.println("error:notlogged");
+		return "error:notlogged";
 	}
 }
