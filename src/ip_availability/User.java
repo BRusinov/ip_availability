@@ -88,7 +88,7 @@ public class User implements General, Runnable {
 	}
 
 	public String ListAbsent(String string) throws IOException {
-		ListAbsentCommandHandler absent = new ListAbsentCommandHandler(string, socket);
+		ListAbsentCommandHandler absent = new ListAbsentCommandHandler(string, socket, this);
 		return absent.ListAbsent(string);
 	}
 

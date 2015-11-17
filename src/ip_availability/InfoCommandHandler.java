@@ -19,18 +19,21 @@ public class InfoCommandHandler implements General {
 
 	public String Info(String string) throws IOException {
 		final String[] split = string.split(":");
-		User consumer= allUsers.get(split[1]);
-		final PrintStream out = new PrintStream(socket.getOutputStream());
-		String result = "ok";
-		if (currentlyLoggedUsers.containsKey(user.name)) {
-			result += ":" + split[1] + ":" + (currentlyLoggedUsers.containsKey(consumer.name) ? "true" : "false") + ":" + usersToLoginCount.get(consumer.name);
-			for (Interval interval : consumer.date) {
-				if (interval.end != null) result += ":" + interval.dateFormat.format(interval.start) + ":" + interval.dateFormat.format(interval.end);
-				else result += ":" + interval.dateFormat.format(interval.start);
+		if(split.length>1){
+			final PrintStream out = new PrintStream(socket.getOutputStream());
+			String result = "ok";
+			if (allUsers.containsKey(user.name) && allUsers.containsKey(split[1])) {
+				User consumer= allUsers.get(split[1]);
+				result += ":" + split[1] + ":" + (currentlyLoggedUsers.containsKey(consumer.name) ? "true" : "false") + ":" + usersToLoginCount.get(consumer.name);
+				for (Interval interval : consumer.date) {
+					if (interval.end != null) result += ":" + interval.dateFormat.format(interval.start) + ":" + interval.dateFormat.format(interval.end);
+					else result += ":" + interval.dateFormat.format(interval.start);
+				}
+				return result;
 			}
-			return result;
+			return "error:notlogged";
 		}
-		return "error:notlogged";
+		return "error:unknowncommand";
 	}
 
 }
