@@ -21,9 +21,7 @@ public class ListAbsentCommandHandler implements General{
 		String users = "ok";
 		if(currentlyLoggedUsers.containsKey(split[0])){
 			for (String name : notLoggedUsers) {
-				if(usersToLoginCount.containsKey(name)){
-					users += ":" + name;
-				}
+				if(usersToLoginCount.containsKey(name)) users += ":" + name;
 			}
 			return users;
 		}

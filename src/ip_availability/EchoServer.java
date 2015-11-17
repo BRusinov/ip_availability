@@ -27,9 +27,7 @@ public class EchoServer implements General {
 			try{
 				socket=localServerSocket.accept();
 			} catch (SocketException e) {
-				if(!localServerSocket.isClosed()){
-					throw e;
-				}
+				if(!localServerSocket.isClosed()) throw e;
 				break;
 			}
 			final User client=new User(this, socket);
@@ -67,13 +65,9 @@ public class EchoServer implements General {
 		LinkedList<String> usernames= new LinkedList<String>();
 		currentlyLoggedUsers.remove(user);
 		for (String name : currentlyLoggedUsers.keySet()) {
-			if(currentlyLoggedUsers.get(name)==user.getSocket()){
-				usernames.add(name);
-			}
+			if(currentlyLoggedUsers.get(name)==user.getSocket()) usernames.add(name);
 		}
-		for (String name : usernames) {
-			currentlyLoggedUsers.remove(name);
-		}
+		for (String name : usernames)  currentlyLoggedUsers.remove(name);
 		clients.remove(user);
 	}
 
